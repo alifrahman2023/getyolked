@@ -46,12 +46,8 @@ function Login() {
             }
             } catch (err) {
             console.error(err);
-            if (err.response.status === 401) {
-                setMessage(err.response.data.detail);
-                return;
-            }
-            else{
-                setMessage("An error occurred. Please try again.");}
+           
+            setMessage("An error occurred. Please try again.");
             } finally {
             setLoading(false);
 

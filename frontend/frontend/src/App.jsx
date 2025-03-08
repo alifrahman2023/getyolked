@@ -6,6 +6,9 @@ import Home from "./components/Home.jsx"
 import Login from "./components/Login.jsx"
 import Register from "./components/Register.jsx"
 import {BrowserRouter, Routes, Route} from "react-router-dom"
+import NavBar from "./components/NavBar.jsx"
+import ProtectedRoute from "./components/ProtectedRoute.jsx"
+
 function App() {
 
   return (
@@ -14,8 +17,11 @@ function App() {
       <Routes>
 
       <Route path="/" element = {
-        
-          <Home/>   
+        <ProtectedRoute>
+          <NavBar>
+            <Home/>  
+          </NavBar> 
+        </ProtectedRoute>
             
       }/>
 

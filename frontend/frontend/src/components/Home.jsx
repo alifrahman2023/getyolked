@@ -17,7 +17,7 @@ const getData = async () => {
 };
 
 const Home = () => {
-    getData();
+    // getData();
     return (
     <div>
         <h1>Welcome to My React App</h1>
