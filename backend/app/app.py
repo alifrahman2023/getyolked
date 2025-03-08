@@ -8,17 +8,14 @@ from flask_cors import CORS
 import datetime
 
 app = Flask(__name__)
-CORS(app)  # Allow cross-origin requests
+
+
+
 
 @app.route("/api/predict", methods=["POST"])
 def predict():
     return jsonify({"prediction": "your result here"})
 
-
-
-
-# Initialize Flask app
-app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for frontend communication
 
 # Database configuration (using SQLite for simplicity)
@@ -72,10 +69,12 @@ def login():
     return {"access_token": access_token, "message": "Login successful"}
 
 
-@app.route("/refresh")
+@app.route("/refresh",methods=["POST"])
 @jwt_required()
 def refresh_token():
-    user = get_jwt_identity()
+    user = get_jwt_identity()  
+    access_token = create_access_token(identity=user.id)
+    return {"access_token": access_token}
 
 # Protected Route (Example)
 @app.route("/protected", methods=["GET"])
