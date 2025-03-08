@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Home from "./components/Home.jsx"
+import Login from "./components/Login.jsx"
+import Register from "./components/Register.jsx"
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 function App() {
 
@@ -15,6 +17,17 @@ function App() {
         
           <Home/>   
             
+      }/>
+
+      <Route path="/login" element = {
+        
+        <Login/>   
+          
+      }/>
+      <Route path="/register" element = {
+        
+        <Register/>   
+          
       }/>
 
       </Routes>
