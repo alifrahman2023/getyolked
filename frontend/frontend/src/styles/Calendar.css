@@ -2,7 +2,7 @@
 .calendar-container {
     width: 90%;
     margin: auto;
-    background-color: white;
+    background-color: #f0ead6;
     color: #333;
     padding: 20px;
     border-radius: 10px;
@@ -32,8 +32,13 @@
 }
 
 .calendar-header button:hover {
-    color: #007BFF;
+    color: gold;
 }
+
+button:focus {
+    outline: none;
+}
+  
 
 h2 {
     font-size: 1.7rem;
@@ -49,7 +54,7 @@ h2 {
     text-transform: uppercase;
     margin-top: 10px;
     gap: 5px;
-    background-color: #007BFF; /* Blue background for weekday names */
+    background-color: #d69b4b; /* Blue background for weekday names */
     color: white;
 }
 
@@ -89,7 +94,7 @@ h2 {
 }
 
 .calendar-cell:hover {
-    background-color: #007BFF; /* Change background on hover */
+    background-color: gold; /* Change background on hover */
     color: white;
     transform: scale(1.1);
 }
@@ -102,7 +107,7 @@ h2 {
 
 /* Active days styling */
 .calendar-cell.active {
-    background-color: #007BFF; /* Active day background */
+    background-color: gold; /* Active day background */
     color: white;
 }
 

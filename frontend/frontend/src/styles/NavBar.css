@@ -3,9 +3,9 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 50px; /* Fixed height */
+    height: 70px; /* Fixed height */
     width: 100%;
-    background-color: #332b2a;
+    background-color: #f0ead6;
     z-index: 1000;
     padding: 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -47,7 +47,7 @@
 
 /* Make sure links are visible */
 .nav-link {
-    color: white;
+    color: black;
     text-decoration: none;
     font-size: 1rem;
     font-weight: bold;
@@ -55,13 +55,17 @@
 }
 
 .nav-link:hover {
-    color: black;
+    color: gold;
 }
 
 .logo {
-    width: 40px;
-    height: 40px; 
+    width: 60px;
+    height: 60px; 
     border-radius: 50%; /* Makes it a circle */
     object-fit: cover; /* Ensures the image fills the circular area */
     transform: translate(-25px, 3px); /* Moves logo a little to the left and down */
+}
+
+.main-content {
+    margin-top: 10x;
 }

@@ -25,16 +25,16 @@
     min-width: 550px;
     width: 100%;
     height: 100%;
-    background-color: #1a1a1a; /* Dark background similar to card */
+    background-color: #f0ead6; /* Light background similar to card */
     padding: 20px;
     border-radius: 20px;
     position: relative;
     margin: 0 auto;
     align-items: center;
     box-sizing: border-box;
-    color: white; /* Ensure text visibility on the dark background */
+    color: black; /* Ensure text visibility on the light background */
     font-weight: bolder; /* Bolder text for the form */
-    border: 1px solid #646cff; /* Add border similar to card hover */
+    border: 1px solid gold; /* Add border similar to card hover */
     box-shadow: 0px 0px 10px 1px rgba(100, 108, 255, 0.2); /* Subtle shadow effect */
     transition: all 0.3s ease-in-out; /* Smooth transitions */
 }
@@ -53,8 +53,8 @@
     outline: 0;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-    background-color: #333; /* Slightly darker input background */
-    color: white;
+    background-color: white; /* Slightly darker input background */
+    color: black;
     box-sizing: border-box;
 }
 
@@ -66,7 +66,7 @@
     display: flex;
     align-items: center;
     padding-left: 30px;
-    background: linear-gradient(90deg, #646cff, #33abcc); /* Updated gradient */
+    background: linear-gradient(90deg, gold, gold); /* Updated gradient */
     -webkit-background-clip: text;
     color: transparent;
 }
@@ -78,7 +78,7 @@
     height: 18px;
     border-radius: 50%;
     left: 0px;
-    background-color:  #33abcc; /* Updated dot color */
+    background-color:  white; /* Updated dot color */
 }
 
 .title::after {
@@ -88,7 +88,7 @@
     height: 18px;
     border-radius: 50%;
     left: 0px;
-    background-color:  #646cff;
+    background-color: gold;
     animation: pulse 1s linear infinite;
 }
 
@@ -108,13 +108,13 @@
 }
 
 .signin a {
-    color:  #33abcc; /* Bright aquamarine for link */
+    color: #d69b4b; /* Bright gold for link */
     font-weight: 600;
 }
 
 .signin a:hover {
     text-decoration: underline;
-    color: #646cff; /* Blue on hover */
+    color: gold; /* Blue on hover */
 }
 
 /* Flex layout for name fields */
@@ -129,10 +129,10 @@
 .submit {
     border: none;
     outline: none;
-    background: linear-gradient(90deg, #646cff, #33abcc); /* Updated gradient */
+    background: linear-gradient(90deg, gold, white); /* Updated gradient */
     padding: 12px;
     border-radius: 10px;
-    color: white;
+    color: black;
     font-size: 18px;
     font-weight: 700;
     cursor: pointer;
@@ -141,7 +141,7 @@
 }
 
 .submit:hover {
-    background: linear-gradient(90deg, #33abcc, #646cff); /* Reverse gradient on hover */
+    background: linear-gradient(90deg, white, gold); /* Reverse gradient on hover */
     transform: scale(1.01);
 }
 
