@@ -1,5 +1,5 @@
 import React from 'react';
-import Chatbot from "./components/Chatbot";
+import Chatbot from "./Chatbot";
 
 const getData = async () => {
     try {
