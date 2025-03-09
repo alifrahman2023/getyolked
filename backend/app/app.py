@@ -6,6 +6,10 @@ from flask_jwt_extended import (
 )
 from flask_cors import CORS
 import datetime
+import google.generativeai as genai
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 
@@ -83,6 +87,22 @@ def protected():
     current_user = get_jwt_identity()
     return jsonify({"message": f"Hello, use {current_user}r!"}), 200
 
+GEMINI_API_KEY = os.getenv("=GEMINI_API_KEY")
+@app.route('/chat', methods=['POST'])
+def chat():
+    genai.configure(api_key=GEMINI_API_KEY)
+    data = request.json
+    user_input = data.get("message", "")
+
+    if not user_input:
+        return jsonify({"error": "No message provided"}), 400
+
+    try:
+        model = genai.GenerativeModel('gemini-pro')
+        response = model.generate_content(user_input)
+        return jsonify({"response": response.text})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 # Run the app
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
