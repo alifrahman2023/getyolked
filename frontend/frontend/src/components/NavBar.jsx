@@ -9,7 +9,7 @@ function NavBar({ children }) {
   
   return (
     <div className="WhatHoldsEverything">
-      <header className={`header ${isAtTop ? "at-top" : ""}`}>
+      <header className={`header `}>
         <nav className="nav-container">
           <Link to="/" className="logo">
             Email Dashboard
