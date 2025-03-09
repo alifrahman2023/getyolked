@@ -7,10 +7,7 @@ function NavBar({ children }) {
   const [isAtTop, setIsAtTop] = useState(true);
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Check if the user is at the top of the page
-      setIsAtTop(window.pageYOffset === 0);
-    };
+    
 
     window.addEventListener("scroll", handleScroll);
     // Clean up the event listener on component unmount
