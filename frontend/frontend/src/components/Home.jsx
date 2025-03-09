@@ -1,4 +1,5 @@
 import React from 'react';
+import Chatbot from "./components/Chatbot";
 
 const getData = async () => {
     try {

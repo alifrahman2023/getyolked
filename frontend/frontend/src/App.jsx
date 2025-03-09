@@ -9,6 +9,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom"
 import NavBar from "./components/NavBar.jsx"
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
 
+
 function App() {
 
   return (
