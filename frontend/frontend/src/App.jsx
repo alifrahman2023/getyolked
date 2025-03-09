@@ -38,9 +38,9 @@ function App() {
       }/>
 
       <Route path="/log/:date" element = {
-        
-        <LogPage/>   
-          
+        <NavBar>
+          <LogPage/>   
+        </NavBar>
       }/>
 
 

@@ -4,7 +4,7 @@ import "../styles/Calendar.css";
 
 const Calendar = ({ activityData }) => {
   const navigate = useNavigate();
-  
+
   const today = new Date();
   const currentYear = today.getFullYear();
 
@@ -15,15 +15,16 @@ const Calendar = ({ activityData }) => {
   const totalDays = new Date(currentYear, month + 1, 0).getDate();
   const days = Array.from({ length: totalDays }, (_, i) => i + 1);
 
-  const getActivityLevel = (day) => activityData[day] || 0;
+  // Check if a day has activity data
+  const isActive = (day) => activityData[day] > 0;
 
-  // Function to handle clicks on days
+  // Handle day clicks
   const handleDayClick = (day) => {
-    const formattedDate = `${currentYear}-${month + 1}-${day}`; // e.g., "2025-03-08"
+    const formattedDate = `${currentYear}-${month + 1}-${day}`;
     navigate(`/log/${formattedDate}`);
   };
 
-  // Handle month navigation
+  // Navigate between months
   const prevMonth = () => {
     if (month > 0) setMonth(month - 1);
   };
@@ -39,6 +40,17 @@ const Calendar = ({ activityData }) => {
         <h2>{new Date(currentYear, month).toLocaleString("default", { month: "long" })} {currentYear}</h2>
         <button onClick={nextMonth} disabled={month === 11}>→</button>
       </div>
+
+      <div className="calendar-weekdays">
+        <div className="calendar-weekday">Mon</div>
+        <div className="calendar-weekday">Tue</div>
+        <div className="calendar-weekday">Wed</div>
+        <div className="calendar-weekday">Thu</div>
+        <div className="calendar-weekday">Fri</div>
+        <div className="calendar-weekday">Sat</div>
+        <div className="calendar-weekday">Sun</div>
+    </div>
+
       <div className="calendar-grid">
         {Array(firstDay).fill(null).map((_, i) => (
           <div key={`empty-${i}`} className="calendar-cell empty"></div>
@@ -46,9 +58,8 @@ const Calendar = ({ activityData }) => {
         {days.map((day) => (
           <div
             key={day}
-            className={`calendar-cell level-${getActivityLevel(day)}`}
+            className={`calendar-cell ${isActive(day) ? "active" : ""}`}
             onClick={() => handleDayClick(day)}
-            style={{ cursor: "pointer" }}
           >
             {day}
           </div>

@@ -1,51 +1,124 @@
+/* Main calendar container */
 .calendar-container {
-    width: 100%;
-    max-width: 400px;
+    width: 90%;
     margin: auto;
-    text-align: center;
-    background-color: black; /* Black background */
-    color: white; /* White text */
+    background-color: white;
+    color: #333;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    max-width: 800px; /* Restrict max width */
+}
+
+/* Header with month name and arrows */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding: 10px 20px;
+    border-bottom: 2px solid #ddd; /* Line separating top section */
+}
+
+.calendar-header button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s;
+}
+
+.calendar-header button:hover {
+    color: #007BFF;
 }
 
 h2 {
-    margin-bottom: 10px;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
+    font-weight: bold;
+    margin: 0;
 }
 
-.calendar-grid {
+/* Weekday names (Mon, Tue, ...) */
+.calendar-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 10px;
     gap: 5px;
+    background-color: #007BFF; /* Blue background for weekday names */
+    color: white;
 }
 
+.calendar-weekday {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Calendar grid (days of the month) */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns for days */
+    font-weight: bold;
+    margin-top: 10px;
+    gap: 5px;
+    min-width: 600px;
+    max-width: 600px;
+    min-height: 400px;
+    max-height: 400px;  /* Fixed height, enough for 5 rows (5 * 60px + 4 * gap) */
+    overflow-y: auto;  /* Allow scrolling vertically if necessary */
+    overflow-x: auto;
+}
+
+/* Ensure each day box has a fixed size */
 .calendar-cell {
-    width: 40px;
-    height: 40px;
+    width: 60px;  /* Fixed width for each day box */
+    height: 60px; /* Fixed height */
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: gray; /* Default gray */
-    color: white;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;  /* Border around each day box */
+    border-radius: 8px;
     font-weight: bold;
-    border-radius: 5px;
-    transition: 0.3s;
-    user-select: none;
-}
-
-.calendar-cell:hover {
-    background-color: darkgray;
+    transition: background-color 0.3s, transform 0.2s ease-in-out;
     cursor: pointer;
 }
 
+.calendar-cell:hover {
+    background-color: #007BFF; /* Change background on hover */
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Empty cells (for days before the start of the month) */
 .empty {
     background: none;
     pointer-events: none;
 }
 
-/* Activity level styling (if activityData exists) */
-.level-1 { background-color: #4CAF50; } /* Low activity */
-.level-2 { background-color: #FFC107; } /* Medium activity */
-.level-3 { background-color: #FF5722; } /* High activity */
+/* Active days styling */
+.calendar-cell.active {
+    background-color: #007BFF; /* Active day background */
+    color: white;
+}
+
+/* Make sure it's responsive on smaller screens */
+@media (max-width: 600px) {
+    .calendar-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .calendar-grid {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .calendar-cell {
+        width: 50px;
+        height: 50px;
+    }
+}
