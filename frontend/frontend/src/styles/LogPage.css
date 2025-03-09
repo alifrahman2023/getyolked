@@ -1,0 +1,35 @@
+.log-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: black;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.log-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.log-list {
+    list-style: none;
+    padding: 0;
+}
+
+.log-list li {
+    background: gray;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+}
+
+.no-log {
+    color: #777;
+    font-size: 18px;
+    margin-top: 10px;
+}

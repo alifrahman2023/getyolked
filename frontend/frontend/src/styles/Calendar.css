@@ -1,0 +1,51 @@
+.calendar-container {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+    background-color: black; /* Black background */
+    color: white; /* White text */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+}
+
+h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: gray; /* Default gray */
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s;
+    user-select: none;
+}
+
+.calendar-cell:hover {
+    background-color: darkgray;
+    cursor: pointer;
+}
+
+.empty {
+    background: none;
+    pointer-events: none;
+}
+
+/* Activity level styling (if activityData exists) */
+.level-1 { background-color: #4CAF50; } /* Low activity */
+.level-2 { background-color: #FFC107; } /* Medium activity */
+.level-3 { background-color: #FF5722; } /* High activity */
