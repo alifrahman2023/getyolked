@@ -45,7 +45,7 @@ const LogPage = () => {
 
   // Format today's date as "YYYY-MM-DD"
   const today = new Date();
-  const formattedToday = today.toISOString().split("T")[0];
+  const formattedToday = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 
   useEffect(() => {
     const fetchPushups = async () => {
