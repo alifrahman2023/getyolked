@@ -1,41 +1,41 @@
-import React from 'react';
-import Chatbot from "./Chatbot";
-import Calendar from "./Calendar"
+import React, { useEffect, useState } from "react";
+import api from "./api"; // Import your axios instance
+import Calendar from "./Calendar";
 
+function Home() {
+  const [activityData, setActivityData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-const activityData={
-  3:1,
-  5:2,
-  10:3,
-  15:4,
-  20:2,
-  25:1
-}
-const getData = async () => {
-    try {
-      const response = await fetch('http://localhost:5001/api/predict', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ data: 'sample input' }), // Send some data, if needed
-      });
-      const data = await response.json();
-      console.log(data);  // Log the prediction or result returned by Flask
-    } catch (error) {
-      console.error('Error:', error);  // Handle any errors
-    }
-};
+  useEffect(() => {
+    const fetchWorkoutData = async () => {
+      try {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1; // JS months are 0-based
 
-const Home = () => {
-    // getData();
-    return (
+        const response = await api.get(`/workouts/monthly?year=${year}&month=${month}`);
+        setActivityData(response.data);
+      } catch (error) {
+        console.error("Error fetching workout data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWorkoutData();
+  }, []);
+
+  return (
     <div>
-        <h1>Get yolked</h1>
-        <Calendar activityData={activityData}/>
-        
+      <h1>Get Yolked</h1>
+
+      {loading ? (
+        <h2>Loading...</h2>
+      ) : (
+        <Calendar activityData={activityData} />
+      )}
     </div>
-    );
+  );
 }
 
 export default Home;
