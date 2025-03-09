@@ -6,14 +6,7 @@ import "../styles/NavBar.css";
 function NavBar({ children }) {
   const [isAtTop, setIsAtTop] = useState(true);
 
-  useEffect(() => {
-    
-
-    window.addEventListener("scroll", handleScroll);
-    // Clean up the event listener on component unmount
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
+  
   return (
     <div className="WhatHoldsEverything">
       <header className={`header ${isAtTop ? "at-top" : ""}`}>
