@@ -9,7 +9,9 @@ function Home() {
 
   return (
     <div>
-      <h1>Get Yolked</h1>
+      <h1>
+        <span style={{ color: '#f0ead6' }}>Get </span> <span style={{ color: 'gold' }}>Yolk</span><span style={{ color: '#f0ead6' }}>ed</span>
+      </h1>
 
       
         <Calendar/>

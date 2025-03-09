@@ -14,7 +14,7 @@ const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const firstDay = new Date(currentYear, month, 1).getDay();
+  const firstDay = (new Date(currentYear, month, 1).getDay() + 6) % 7;
   const totalDays = new Date(currentYear, month + 1, 0).getDate();
   const days = Array.from({ length: totalDays }, (_, i) => i + 1);
 
