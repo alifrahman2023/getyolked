@@ -62,7 +62,6 @@ const FileDropzone = ({ onFileUpload }) => {
       });
 
       alert("File uploaded and processed successfully!\n" + data.message);
-      // Optionally, you can do something with the returned data (pushup count, videoUrl, etc.)
       console.log("Response:", data);
     } catch (error) {
       console.error("Upload error:", error);

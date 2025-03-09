@@ -134,19 +134,52 @@ def extract_angle_sequence(video_path, sample_interval_sec=0.4, resize=(320, 320
     return np.array(angles_sequence)
 
 def count_pushup_reps_from_angles(angle_sequence, down_threshold=90, up_threshold=150):
+    """
+    Process the angle_sequence (an iterable of [elbow_angle, plank_angle] pairs)
+    to count push-up reps and label each interval as part of a good rep (1) or a bad rep (0).
+    
+    Returns:
+        reps (int): Number of good reps.
+        labels (list): A list with the same length as angle_sequence where:
+                       - 1 indicates an interval from a good rep,
+                       - 0 indicates an interval from a bad rep,
+                       - -1 indicates an interval not belonging to any completed rep.
+    """
     reps = 0
-    down = False
-    for angles in angle_sequence:
-        # Assuming the first element is the right elbow angle now.
+    labels = [-1] * len(angle_sequence)  # default: -1 means not part of a rep
+    current_rep_indices = []  # store indices for the current rep segment
+    in_rep = False  # flag for whether we're in a rep
+
+    for i, angles in enumerate(angle_sequence):
         elbow_angle = angles[0]
         plank_angle = angles[1]
-        if elbow_angle < down_threshold and not down:
-            down = True
-        if elbow_angle > up_threshold and down:
-            if plank_angle > 150 and plank_angle <= 185:
-              reps += 1
-            down = False
-    return reps
+
+        # Start rep: when elbow goes below down_threshold and we're not already in a rep
+        if elbow_angle < down_threshold and not in_rep:
+            in_rep = True
+            current_rep_indices = [i]
+        # If we're in a rep, keep tracking indices
+        elif in_rep:
+            current_rep_indices.append(i)
+            # End rep: when elbow goes above up_threshold
+            if elbow_angle > up_threshold:
+                # Compute average plank angle over the rep segment (or use the final value if preferred)
+                rep_plank_angles = [angle_sequence[j][1] for j in current_rep_indices]
+                avg_plank = sum(rep_plank_angles) / len(rep_plank_angles)
+                # Classify rep: good rep if average plank is within (150, 185], else bad rep
+                quality = 1 if (avg_plank > 150 and avg_plank <= 185) else 0
+                # Mark all intervals in this rep with the computed quality
+                for j in current_rep_indices:
+                    labels[j] = quality
+                # If it's a good rep, count it
+                if quality == 1:
+                    reps += 1
+                # Reset for next rep
+                in_rep = False
+                current_rep_indices = []
+        # Else, if not in a rep, label stays as default (-1)
+    
+    return reps, labels
 
 def get_pushup_count(video_url):
     """
@@ -158,6 +191,7 @@ def get_pushup_count(video_url):
     print("IN GET PUSHUP COUNT")
     angle_sequence = extract_angle_sequence(video_url)
     print("ANGLE SEQUENCE: ", angle_sequence)
+     
     return count_pushup_reps_from_angles(angle_sequence)
 
 
@@ -200,6 +234,7 @@ class DayWorkoutData(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     # Map this record to a user.
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    video_labels = db.Column(db.JSON, default=dict, nullable=False)
 
 
 with app.app_context():
@@ -284,9 +319,8 @@ def monthly_workouts(current_user):
 def daily_pushups(current_user):
     from sqlalchemy import extract
 
-    # Expect a "date" query parameter in format "YYYY-M-D"
+    # Expect a "date" query parameter in format "YYYY-MM-DD"
     date_str = request.args.get("date")
-
     if not date_str:
         return jsonify({"error": "Please provide a 'date' query parameter"}), 400
 
@@ -297,7 +331,7 @@ def daily_pushups(current_user):
         return jsonify({"error": "Invalid date format. Use 'YYYY-MM-DD'."}), 400
 
     # Query all DayWorkoutData entries for the given date
-    workouts = db.session.query(DayWorkoutData.pushups).filter(
+    workouts = DayWorkoutData.query.filter(
         DayWorkoutData.user_id == current_user.id,
         extract("year", DayWorkoutData.created_at) == year,
         extract("month", DayWorkoutData.created_at) == month,
@@ -305,9 +339,20 @@ def daily_pushups(current_user):
     ).all()
 
     # Sum up all push-ups from the day's workouts
-    total_pushups = sum(workout[0] for workout in workouts if workout[0] is not None)
+    total_pushups = sum(workout.pushups for workout in workouts if workout.pushups is not None)
 
-    return jsonify({"date": date_str, "total_pushups": total_pushups})
+    # Gather all videos and their labels from the day's workouts.
+    videos = []
+    for workout in workouts:
+        if workout.video_labels:
+            for video_url, labels in workout.video_labels.items():
+                videos.append({"video_url": video_url, "labels": labels})
+
+    return jsonify({
+        "date": date_str,
+        "total_pushups": total_pushups,
+        "videos": videos
+    })
 # Helper function to generate access and refresh tokens
 def generate_tokens(user):
     now = datetime.now(timezone.utc)
@@ -461,6 +506,15 @@ def convert_to_mp4(input_path, original_filename):
 
     return output_path, final_filename, clip
 
+
+
+AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_REGION = os.getenv("AWS_REGION")
+BUCKET_NAME = os.getenv("BUCKET_NAME")
+CLOUDFRONT_DOMAIN = os.getenv("CLOUDFRONT_DOMAIN") 
+print("AWS_ACCESS_KEY: ", AWS_ACCESS_KEY)
+print("AWS_REGION: ", AWS_REGION)
 @app.route("/api/predict", methods=["POST"])
 @token_required
 def predict(current_user):
@@ -477,6 +531,7 @@ def predict(current_user):
     _, ext = os.path.splitext(original_filename)
     ext = ext.lower()
 
+    madeCopy = False
     try:
         # Save the uploaded video to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as temp_input:
@@ -485,31 +540,37 @@ def predict(current_user):
 
         # If the file is a MOV, convert it to MP4 with a unique hashed filename; otherwise, use the file as is.
         if ext == ".mov":
-            print("ABOUT TO CONVERT ")
+            print("ABOUT TO CONVERT")
             final_video_path, final_filename, clip = convert_to_mp4(temp_input_path, original_filename)
-            pushup_count = get_pushup_count(final_video_path)
-            clip.close()
+            pushup_count, labels = get_pushup_count(final_video_path)
+            madeCopy = True
         else:
             final_video_path = temp_input_path
             final_filename = original_filename
-            pushup_count = get_pushup_count(final_video_path)
+            pushup_count, labels = get_pushup_count(final_video_path)
 
-        # Process the video to get pushup count using your get_pushup_count function.
-       
-        print("PushupCOUNNNNNNNNTTTTTTTTT: ", pushup_count)
+        print("Pushup Count:", pushup_count)
         # Upload the final video file to S3.
-        # s3_key = f"workouts/{current_user.id}/{final_filename}"
-        # s3 = boto3.client(
-        #     "s3",
-        #     aws_access_key_id=AWS_ACCESS_KEY,
-        #     aws_secret_access_key=AWS_SECRET_KEY
-        # )
-        # with open(final_video_path, "rb") as f:
-        #     # We always set ContentType to video/mp4 even if the file wasn't converted; adjust if needed.
-        #     s3.upload_fileobj(f, BUCKET_NAME, s3_key, ExtraArgs={"ContentType": "video/mp4"})
+        try:
+            s3_key = f"workouts/{current_user.id}/{final_filename}"
+            s3 = boto3.client(
+                "s3",
+                aws_access_key_id=AWS_ACCESS_KEY,
+                aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+            )
+            with open(final_video_path, "rb") as f:
+                # Set ContentType to video/mp4; note: ACL is removed for bucket policy or OAC-managed buckets.
+                s3.upload_fileobj(f, BUCKET_NAME, s3_key, ExtraArgs={"ContentType": "video/mp4"})
 
-        # video_url = f"https://{BUCKET_NAME}.s3.amazonaws.com/{s3_key}"
+            if madeCopy:
+                clip.close()
 
+            # Build the video URL using your CloudFront domain and the S3 key.
+            video_url = f"https://{CLOUDFRONT_DOMAIN}/{s3_key}"
+        except Exception as e:
+            print(e)
+            return jsonify({"error": "Failed to upload video", "message": str(e)}), 500
+        print("now hereeeeeeeeeeeeee")
         # Update or create today's workout record.
         now = datetime.now(timezone.utc)
         today = now.date()
@@ -517,29 +578,34 @@ def predict(current_user):
             DayWorkoutData.user_id == current_user.id,
             cast(DayWorkoutData.created_at, Date) == today
         ).first()
+        print("afterrrr creation")
 
         if workout_entry:
             workout_entry.pushups += pushup_count
+            # Initialize video_labels if not already present
+            if workout_entry.video_labels is None:
+                workout_entry.video_labels = {}
+            # Add the new mapping to the existing dictionary
+            workout_entry.video_labels[video_url] = labels
         else:
             new_entry = DayWorkoutData(
                 user_id=current_user.id,
                 created_at=now,
-                pushups=pushup_count
+                pushups=pushup_count,
+                video_labels={video_url: labels}
             )
             db.session.add(new_entry)
         db.session.commit()
-
+        print("updated database")
         # Clean up temporary files.
         if os.path.exists(temp_input_path):
             os.remove(temp_input_path)
-        # If the file was converted, delete the converted file as well.
         if ext == ".mov" and os.path.exists(final_video_path):
             os.remove(final_video_path)
 
         return jsonify({
             "pushups": pushup_count,
             "message": "Workout logged successfully",
-            # "videoUrl": video_url
         })
 
     except Exception as e:
@@ -553,5 +619,6 @@ def predict(current_user):
             pass
         return jsonify({"error": "Failed to process video", "message": str(e)}), 500
 
+    
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
