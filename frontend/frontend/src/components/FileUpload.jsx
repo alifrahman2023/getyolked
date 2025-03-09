@@ -71,7 +71,7 @@ const FileDropzone = ({ onFileUpload }) => {
   };
 
   return (
-    <div>
+    <div className="whole-dropbox">
       <div
         className={`file-dropbox ${dragActive ? "drag-active" : ""}`}
         onDragOver={handleDragOver}

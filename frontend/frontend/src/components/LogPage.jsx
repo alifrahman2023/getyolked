@@ -10,12 +10,15 @@ const VideoTimeline = ({ videoUrl, labels }) => {
   const blockWidth = `${100 / labels.length}%`;
 
   return (
-    <div className="video-timeline-container" style={{ marginBottom: "20px" }}>
-      <video width="320" controls src={videoUrl}></video>
+    <div 
+      className="video-timeline-container" 
+      style={{ marginBottom: "20px", width: "320px" }}
+    >
+      <video style={{ width: "100%" }} controls src={videoUrl}></video>
       <div
         className="timeline"
         style={{
-          width: "320px",
+          width: "100%",
           marginTop: "8px",
           display: "flex",
         }}
@@ -43,7 +46,7 @@ const LogPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Format today's date as "YYYY-MM-DD"
+  // Format today's date as "YYYY-M-D"
   const today = new Date();
   const formattedToday = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 
@@ -77,27 +80,38 @@ const LogPage = () => {
     <>
       <div className="log-container">
         <h1 className="log-title">Workout Log for {date}</h1>
-
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p className="error-message">{error}</p>
         ) : (
-          <>
-            <ul className="log-list">
-              <li>Push-ups: {pushups} reps</li>
-            </ul>
-
-            {/* Display each video and its timeline */}
-            {videos.map((videoObj, index) => (
-              <VideoTimeline
-                key={index}
-                videoUrl={videoObj.video_url}
-                labels={videoObj.labels}
-              />
-            ))}
-          </>
+          <ul className="log-list">
+            <li>Push-ups: {pushups} reps</li>
+          </ul>
         )}
+      </div>
+
+      {/* Videos rendered outside the log container */}
+      <div
+        className="videos-container"
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "2rem",
+          marginTop: "0px",
+          backgroundColor: "black",
+          padding: "2rem",
+          borderRadius: "10px"
+        }}
+      >
+        {videos.map((videoObj, index) => (
+          <VideoTimeline
+            key={index}
+            videoUrl={videoObj.video_url}
+            labels={videoObj.labels}
+          />
+        ))}
       </div>
 
       {/* Only show the file upload if the page's date matches today's date */}

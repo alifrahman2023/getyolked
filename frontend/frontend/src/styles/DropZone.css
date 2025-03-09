@@ -1,48 +1,57 @@
+.whole-dropbox{
+  margin-top: 3rem;
+}
+
+
 .file-dropbox {
-    width: 100%;
-    max-width: 400px;
-    height: 200px;
-    border: 2px dashed #007bff;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 16px;
-    color: #007bff;
-    background-color: transparent;
-    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
-  }
- 
-  .file-dropbox.drag-active {
-    background-color: #252525;
-    border-color: #0077b6;
-  }
- 
-  .file-dropbox p {
-    margin: 0;
-  }
- 
-  .file-info {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #333;
-  }
- 
-  .error-message {
-    color: #dc3545;
-    font-weight: bolder;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-  .file-dropbox-label{
-    font-weight: bolder;
+  width: 100%;
+  max-width: 400px;
+  height: 200px;
+  margin: 0 auto;
+  border: 2px dashed #000;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+  color: #000;
+  background-color: transparent;
+  transition: background-color 0.3s, border-color 0.3s;
+}
 
+.file-dropbox.drag-active {
+  background-color: #f0f0f0;
+  border-color: #333;
+}
 
-  }
-  .file-dropbox-label:hover{
-    font-weight: bolder;
-    color: #0077b6;
+.file-dropbox p {
+  margin: 0;
+}
 
+.file-dropbox-label {
+  display: block;
+  text-align: center;
+  margin: 10px auto;
+  cursor: pointer;
+  font-weight: bold;
+}
 
-  }
+.file-info,
+.error-message {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.error-message {
+  color: #dc3545;
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
