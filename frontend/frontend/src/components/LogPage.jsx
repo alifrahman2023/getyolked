@@ -43,6 +43,10 @@ const LogPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Format today's date as "YYYY-MM-DD"
+  const today = new Date();
+  const formattedToday = today.toISOString().split("T")[0];
+
   useEffect(() => {
     const fetchPushups = async () => {
       setLoading(true);
@@ -96,7 +100,8 @@ const LogPage = () => {
         )}
       </div>
 
-      <FileDropzone />
+      {/* Only show the file upload if the page's date matches today's date */}
+      {date === formattedToday && <FileDropzone />}
     </>
   );
 };
