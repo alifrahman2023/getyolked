@@ -8,13 +8,13 @@ const api = axios.create({
 // Function to get tokens
 const getTokens = () => ({
   access: localStorage.getItem("access_token"),
-  refresh: localStorage.getItem("refresh_token"),
+  //refresh: localStorage.getItem("refresh_token"),
 });
 
 // Function to store tokens
 const storeTokens = (access, refresh) => {
   if (access) localStorage.setItem("access_token", access);
-  if (refresh) localStorage.setItem("refresh_token", refresh);
+  //if (refresh) localStorage.setItem("refresh_token", refresh);
 };
 
 // **Request Interceptor** (Attach tokens to requests)
@@ -42,15 +42,16 @@ api.interceptors.response.use(
     }
     return response;
   },
-  async (error) => {
+  /*async (error) => {
+    console.log("Errorr: ",error)
     const originalRequest = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const { refresh } = getTokens();
 
       if (!refresh) {
-        localStorage.clear();
-        window.location.href = "/login"; // Redirect if refresh token is missing
+        //localStorage.clear();
+        //window.location.href = "/login"; // Redirect if refresh token is missing
         return Promise.reject("No refresh token, logging out...");
       }
 
@@ -65,13 +66,14 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${data.access_token}`;
         return api(originalRequest); // Retry the original request
       } catch (refreshError) {
-        localStorage.clear();
-        window.location.href = "/login"; // Redirect if refresh fails
+        console.log
+        //localStorage.clear();
+        //window.location.href = "/login"; // Redirect if refresh fails
         return Promise.reject(refreshError);
       }
     }
     return Promise.reject(error);
-  }
+  }*/
 );
 
 export default api;
