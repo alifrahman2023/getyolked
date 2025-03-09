@@ -4,4 +4,6 @@ Venv/
 ENV/
 env/
 .venv/
+
+# Ignore environment files
 backend/app/.env
