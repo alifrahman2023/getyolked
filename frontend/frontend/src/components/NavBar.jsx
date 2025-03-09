@@ -4,7 +4,7 @@ import logout from "./Logout.js";
 import "../styles/NavBar.css";
 
 function NavBar({ children }) {
-  const [isAtTop, setIsAtTop] = useState(true);
+  
 
   
   return (
