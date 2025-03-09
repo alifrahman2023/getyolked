@@ -1,0 +1,48 @@
+.file-dropbox {
+    width: 100%;
+    max-width: 400px;
+    height: 200px;
+    border: 2px dashed #007bff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 16px;
+    color: #007bff;
+    background-color: transparent;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  }
+ 
+  .file-dropbox.drag-active {
+    background-color: #252525;
+    border-color: #0077b6;
+  }
+ 
+  .file-dropbox p {
+    margin: 0;
+  }
+ 
+  .file-info {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+  }
+ 
+  .error-message {
+    color: #dc3545;
+    font-weight: bolder;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  .file-dropbox-label{
+    font-weight: bolder;
+
+
+  }
+  .file-dropbox-label:hover{
+    font-weight: bolder;
+    color: #0077b6;
+
+
+  }

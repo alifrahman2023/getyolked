@@ -4,7 +4,7 @@ import "../styles/Calendar.css";
 
 const Calendar = ({ activityData }) => {
   const navigate = useNavigate();
-
+  
   const today = new Date();
   const currentYear = today.getFullYear();
 
