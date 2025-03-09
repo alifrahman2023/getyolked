@@ -6,35 +6,14 @@ function Home() {
   const [activityData, setActivityData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchWorkoutData = async () => {
-      try {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1; // JS months are 0-based
-
-        const response = await api.get(`/workouts/monthly?year=${year}&month=${month}`);
-        console.log("calendar response", response)
-        setActivityData(response.data);
-      } catch (error) {
-        console.error("Error fetching workout data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWorkoutData();
-  }, []);
 
   return (
     <div>
       <h1>Get Yolked</h1>
 
-      {loading ? (
-        <h2>Loading...</h2>
-      ) : (
-        <Calendar activityData={activityData} />
-      )}
+      
+        <Calendar/>
+      
     </div>
   );
 }
