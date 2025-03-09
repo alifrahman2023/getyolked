@@ -14,6 +14,7 @@ function Home() {
         const month = today.getMonth() + 1; // JS months are 0-based
 
         const response = await api.get(`/workouts/monthly?year=${year}&month=${month}`);
+        console.log("calendar response", response)
         setActivityData(response.data);
       } catch (error) {
         console.error("Error fetching workout data:", error);
