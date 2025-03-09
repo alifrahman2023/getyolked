@@ -14,12 +14,6 @@ import os
 app = Flask(__name__)
 
 
-
-
-@app.route("/api/predict", methods=["POST"])
-def predict():
-    return jsonify({"prediction": "your result here"})
-
 CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for frontend communication
 
 # Database configuration (using SQLite for simplicity)
@@ -103,6 +97,19 @@ def chat():
         return jsonify({"response": response.text})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route("/api/predict", methods=["POST"])
+def predict():
+    print("got hit")
+   
+    auth_header = request.headers.get("Authorization")
+    auth_header.split(" ")
+   
+    print(auth_header)
+    auth_header = auth_header[1]
+    decoded_token = decode_token(auth_header)
+    print("Decoded Token", decoded_token)
+    return {"prediction": "your result here "}
 # Run the app
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
