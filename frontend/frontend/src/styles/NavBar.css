@@ -1,37 +1,26 @@
-/* Sticky navbar */
 .header {
-    position: fixed; /* Ensures it stays at the top */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    width: 100%; /* Makes it span the entire width */
-    background-color: white;
+    height: 50px; /* Fixed height */
+    width: 100%;
+    background-color: #332b2a;
     z-index: 1000;
-    padding: 10px 0;
+    padding: 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Push content below the navbar */
-.main-content {
-    margin-top: 60px; /* Adjust based on the navbar height */
+    display: flex;
+    align-items: center; /* Ensures all elements align */
 }
 
 /* Navigation container */
 .nav-container {
-    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 1rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Keeps Home left & Logout right */
     align-items: center;
-}
-
-/* Logo styling */
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #0077b6;
-    text-decoration: none;
 }
 
 /* Navigation menu */
@@ -43,26 +32,36 @@
     padding: 0;
 }
 
-/* Navigation links */
+/* Home link styles */
+.nav-item {
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+/* Logout should be pushed to the right */
+.logout {
+    margin-left: auto; /* Pushes Logout to the right */
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Make sure links are visible */
 .nav-link {
-    color: black;
+    color: white;
     text-decoration: none;
     font-size: 1rem;
     font-weight: bold;
     transition: color 0.3s ease;
 }
-.nav-item{
-    font-weight: bolder;
-    cursor: pointer;
-}
-.nav-link:hover,
-.nav-link.active {
-    color: #9b59b6;
+
+.nav-link:hover {
+    color: black;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .nav-menu {
-        gap: 1rem;
-    }
+.logo {
+    width: 40px;
+    height: 40px; 
+    border-radius: 50%; /* Makes it a circle */
+    object-fit: cover; /* Ensures the image fills the circular area */
+    transform: translate(-25px, 3px); /* Moves logo a little to the left and down */
 }
