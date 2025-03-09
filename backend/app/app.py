@@ -14,7 +14,7 @@ import os
 app = Flask(__name__)
 
 
-CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for frontend communication
+CORS(app, resources={r"/*": {"origins": "*"}},supports_credentials=True)  # Enable CORS for frontend communication
 
 # Database configuration (using SQLite for simplicity)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
