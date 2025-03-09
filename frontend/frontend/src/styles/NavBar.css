@@ -1,48 +1,22 @@
-/* Collapsed header when not at top */
+/* Sticky navbar */
 .header {
-    top: 0; 
-    position: fixed;
+    position: fixed; /* Ensures it stays at the top */
+    top: 0;
     left: 0;
     right: 0;
-    width: 100%;
-    justify-self: center;
-    border-radius: 2px;
-    padding: 5px;
+    width: 100%; /* Makes it span the entire width */
+    background-color: white;
     z-index: 1000;
-    height: 0rem; /* Minimal height (just a tab) */
-    background-color: rgb(255, 255, 255); /* Adjust background as needed */
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-    transition: height 0.3s ease, top 0.1s ease;
-    overflow: hidden; /* Hide inner content when collapsed */
-  }
-  
-  /* Full header when page is at top */
-  .header.at-top {
-    height: 2rem; /* Normal header height */
-    top: 0rem;  /* Slight offset from top */
-    background-color: transparent; /* As defined before */
-  }
-  
-  /* Expand header on hover when scrolled down */
-  .header:not(.at-top):hover {
-    height: 2rem;  /* Expand to normal height */
-    top: 0rem;   /* Slide down from the top */
-  }
-  
-  /* Hide nav content (i.e. text and links) when header is collapsed */
-  .header:not(.at-top) .nav-container {
-    opacity: 0;
-    background-color: transparent;
-    color: transparent;
-    transition: opacity 0.3s ease;
-  }
-  
-  /* Reveal nav content on hover */
-  .header:not(.at-top):hover .nav-container {
-    opacity: 1;
-  }
-  
-  
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Push content below the navbar */
+.main-content {
+    margin-top: 60px; /* Adjust based on the navbar height */
+}
+
+/* Navigation container */
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -50,97 +24,45 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
 }
 
-/* Logo with a blue gradient */
+/* Logo styling */
 .logo {
     font-size: 1.5rem;
-    font-weight: bolder;
-    background: linear-gradient(90deg, #0077b6, #00b4d8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+    color: #0077b6;
     text-decoration: none;
 }
 
+/* Navigation menu */
 .nav-menu {
     display: flex;
     list-style: none;
+    gap: 1.5rem;
     margin: 0;
     padding: 0;
-    gap: 2rem;
-    justify-content: flex-end;
-    font-weight: bolder;
 }
 
-.nav-item {
-    font-size: large;
-}
-
-.nav-item :hover {
-    cursor: pointer;
-}
-
-/* Other links: white by default with a purple hover/active state */
+/* Navigation links */
 .nav-link {
-    color: white;
+    color: black;
     text-decoration: none;
     font-size: 1rem;
-    padding: 0.5rem;
+    font-weight: bold;
     transition: color 0.3s ease;
+}
+.nav-item{
     font-weight: bolder;
+    cursor: pointer;
 }
-
-.nav-link:hover {
-    color: #9b59b6;
-}
-
+.nav-link:hover,
 .nav-link.active {
     color: #9b59b6;
-    font-weight: 600;
 }
 
-.main-content {
-    margin-top: 3rem; /* This offset ensures all children start below the fixed header */
-    /* padding: 0 1rem; */
-    width: 100%;
-    height: calc(100% - 3rem);
-    overflow:hidden;
-}
-
-/* Responsive styles */
-@media (max-width: 1024px) {
-    .nav-container {
-        flex-direction: row;
-        height: 2rem;
-        padding: 1rem;
-        justify-content: space-between;
-    }
-
-    .nav-menu {
-        gap: 1rem;
-        flex-direction: row;
-    }
-
-    .main-content {
-        margin-top: 3rem;
-    }
-}
-
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .nav-container {
-        flex-direction: row;
-        height: 2rem;
-        padding: 1rem;
-        justify-content: space-between;
-    }
-
     .nav-menu {
-        flex-direction: row;
         gap: 1rem;
-    }
-
-    .main-content {
-        margin-top: 3rem;
     }
 }
