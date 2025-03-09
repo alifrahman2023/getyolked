@@ -8,14 +8,22 @@ const LogPage = () => {
   const { date } = useParams();
   const [pushups, setPushups] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPushups = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await api.get(`/workouts/daily?date=${date}`);
-        setPushups(response.data.total_pushups);
+        if (response.data && typeof response.data.total_pushups === "number") {
+          setPushups(response.data.total_pushups);
+        } else {
+          setPushups(0); // Default to 0 if response is unexpected
+        }
       } catch (error) {
         console.error("Error fetching push-ups:", error);
+        setError("Failed to fetch push-ups. Please try again.");
         setPushups(0);
       } finally {
         setLoading(false);
@@ -32,6 +40,8 @@ const LogPage = () => {
 
         {loading ? (
           <p>Loading...</p>
+        ) : error ? (
+          <p className="error-message">{error}</p>
         ) : (
           <ul className="log-list">
             <li>Push-ups: {pushups} reps</li>
