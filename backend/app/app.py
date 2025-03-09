@@ -19,9 +19,9 @@ CORS(app, resources={r"/*": {"origins": "*"}},supports_credentials=True)  # Enab
 # Database configuration (using SQLite for simplicity)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["JWT_SECRET_KEY"] = "asuh9273yhptiu5th2736oiuh76h3nrbuy2983"  # Change to a secure key
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")# Change to a secure key
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(hours=1)
-
+print("SCRET KEY IS: ", os.getenv("JWT_SECRET_KEY"))
 # Initialize extensions
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
@@ -104,10 +104,10 @@ def predict():
    
     auth_header = request.headers.get("Authorization")
     auth_header.split(" ")
-   
-    print(auth_header)
-    auth_header = auth_header[1]
-    decoded_token = decode_token(auth_header)
+    
+    print("Auth header", auth_header)
+    just_token = auth_header[1]  
+    decoded_token = jwt.decode(just_token, app.config["JWT_SECRET_KEY"], algorithms=["HS256"])
     print("Decoded Token", decoded_token)
     return {"prediction": "your result here "}
 # Run the app
